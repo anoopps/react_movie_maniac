@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
+import { getMoviesWithImages } from "../Services/movieService.js";
 
 const MovieList = () => {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getMoviesWithImages();
+      // console.log("Fetched Movies:", result);
+      setMovies(result);
+    }
+    fetchData();
+  }, []);
+
+  // console.log("Movies in State:", movies);
+
   return (
     <div className="container movie_list">
-      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <h1 class="display-4">Movie Maniac</h1>
-        <p class="lead">
+      <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 className="display-4">Movie Maniac</h1>
+        <p className="lead">
           Welcome to Movie Maniac - Your Ultimate Movie Destination!
         </p>
       </div>
@@ -44,8 +58,11 @@ const MovieList = () => {
         </header>
 
         {/* movie card component */}
-        <div className="movie_card">
-          <MovieCard />
+        <div className="movie_cards">
+          {movies.map((movie, index) => {
+            // console.log("Rendering Movie:", movie);
+            return <MovieCard key={movie.id} movie={movie} />;
+          })}
         </div>
       </div>
     </div>
