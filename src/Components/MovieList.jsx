@@ -14,6 +14,14 @@ const MovieList = () => {
     fetchData();
   }, []);
 
+  const handleFilterMovie = (rating) => () => {
+    console.log("Filtering movies with rating:", rating);
+    const filteredMovies = movies.filter(
+      (movie) => movie.vote_average >= rating
+    );
+    setMovies(filteredMovies);
+  };
+
   // console.log("Movies in State:", movies);
 
   return (
@@ -36,9 +44,24 @@ const MovieList = () => {
               <div className="movie_list_fs">
                 {/* /* star rating */}
                 <ul className="movie_filter">
-                  <li className="movie_filter_item active">8+ Star</li>
-                  <li className="movie_filter_item">7+ Star</li>
-                  <li className="movie_filter_item">6+ Star</li>
+                  <li
+                    className="movie_filter_item active"
+                    onClick={handleFilterMovie(8)}
+                  >
+                    8+ Star
+                  </li>
+                  <li
+                    className="movie_filter_item"
+                    onClick={handleFilterMovie(7)}
+                  >
+                    7+ Star
+                  </li>
+                  <li
+                    className="movie_filter_item"
+                    onClick={handleFilterMovie(6)}
+                  >
+                    6+ Star
+                  </li>
                 </ul>
 
                 <select className="movie_sorting">

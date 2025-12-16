@@ -22,11 +22,16 @@ export const getMoviesWithImages = async () => {
           const detailRes = await fetch(
             `${BASE}/title/${m.id}/details/?apiKey=${API_KEY}`
           );
+
+          const items = [3, 4, 7, 8, 9, 10];
+          const randomItem = items[Math.floor(Math.random() * items.length)];
+
           const details = await detailRes.json();
           return {
             ...m,
             poster: details.poster || null,
             backdrop: details.backdrop || null,
+            vote_average: randomItem,
           };
         } catch (err) {
           console.error("Detail fetch error:", err);
