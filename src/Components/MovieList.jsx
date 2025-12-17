@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
 import { getMoviesWithImages } from "../Services/movieService.js";
+import FilterMovieGroup from "./FilterMovieGroup.jsx";
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
+  const [minRating, setMinRating] = useState(0);
+  const [filterMovies, setFilterMovies] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const result = await getMoviesWithImages();
       // console.log("Fetched Movies:", result);
       setMovies(result);
+      setFilterMovies(result);
     }
     fetchData();
   }, []);
 
-  const handleFilterMovie = (rating) => () => {
-    console.log("Filtering movies with rating:", rating);
-    const filteredMovies = movies.filter(
-      (movie) => movie.vote_average >= rating
-    );
-    setMovies(filteredMovies);
+  const handleFilterMovie = (rate) => () => {
+    setMinRating(rate);
+    console.log("Filtering movies with rating:", rate);
+    if (rate === minRating) {
+      setMinRating(0);
+      setFilterMovies(movies);
+    } else {
+      const filteredMovies = movies.filter(
+        (movie) => movie.vote_average >= rate
+      );
+      setFilterMovies(filteredMovies);
+    }
   };
 
   // console.log("Movies in State:", movies);
@@ -42,34 +52,17 @@ const MovieList = () => {
 
             <div className="col-md-4">
               <div className="movie_list_fs">
-                {/* /* star rating */}
-                <ul className="movie_filter">
-                  <li
-                    className="movie_filter_item active"
-                    onClick={handleFilterMovie(8)}
-                  >
-                    8+ Star
-                  </li>
-                  <li
-                    className="movie_filter_item"
-                    onClick={handleFilterMovie(7)}
-                  >
-                    7+ Star
-                  </li>
-                  <li
-                    className="movie_filter_item"
-                    onClick={handleFilterMovie(6)}
-                  >
-                    6+ Star
-                  </li>
-                </ul>
+                <FilterMovieGroup
+                  minRating={minRating}
+                  handleFilterMovie={handleFilterMovie}
+                  rating={[8, 7, 6]}
+                />
 
                 <select className="movie_sorting">
                   <option value="">Sort By</option>
                   <option value="">Date</option>
                   <option value="">Rating</option>
                 </select>
-
                 <select className="movie_sorting">
                   <option value="">Sort By</option>
                   <option value="">Ascending</option>
@@ -82,7 +75,7 @@ const MovieList = () => {
 
         {/* movie card component */}
         <div className="movie_cards">
-          {movies.map((movie, index) => {
+          {filterMovies.map((movie, index) => {
             // console.log("Rendering Movie:", movie);
             return <MovieCard key={movie.id} movie={movie} />;
           })}
