@@ -7,6 +7,7 @@ function FilterMovieGroup({ minRating, handleFilterMovie, rating }) {
         {rating.map((rate, index) => {
           return (
             <li
+              key={index}
               className={
                 minRating == rate
                   ? "movie_filter_item active"

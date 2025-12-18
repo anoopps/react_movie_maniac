@@ -32,6 +32,7 @@ export const getMoviesWithImages = async () => {
             poster: details.poster || null,
             backdrop: details.backdrop || null,
             vote_average: randomItem,
+            release_date: details.year || "N/A",
           };
         } catch (err) {
           console.error("Detail fetch error:", err);
