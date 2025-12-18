@@ -1,26 +1,42 @@
 import React, { useEffect, useState } from "react";
+import _ from "lodash";
+
 import MovieCard from "./MovieCard";
 import { getMoviesWithImages } from "../Services/movieService.js";
 import FilterMovieGroup from "./FilterMovieGroup.jsx";
 
 const MovieList = () => {
+  // State to hold the list of movies
   const [movies, setMovies] = useState([]);
+  // State to hold the minimum rating for filtering
   const [minRating, setMinRating] = useState(0);
+  // State to hold the filtered list of movies
   const [filterMovies, setFilterMovies] = useState([]);
+
+  // filter movies based on sorting and rating
+  const [sort, setSort] = useState({
+    by: "default",
+    order: "asc",
+  });
 
   useEffect(() => {
     async function fetchData() {
       const result = await getMoviesWithImages();
-      // console.log("Fetched Movies:", result);
       setMovies(result);
       setFilterMovies(result);
     }
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (sort.by != "default") {
+      const sortedMovies = _.orderBy(filterMovies, [sort.by], [sort.order]);
+      setFilterMovies(sortedMovies);
+    }
+  }, [sort]);
+
   const handleFilterMovie = (rate) => () => {
     setMinRating(rate);
-    console.log("Filtering movies with rating:", rate);
     if (rate === minRating) {
       setMinRating(0);
       setFilterMovies(movies);
@@ -32,7 +48,11 @@ const MovieList = () => {
     }
   };
 
-  // console.log("Movies in State:", movies);
+  const handleSort = (e) => {
+    const { name, value } = e.target;
+    const newSort = { ...sort, [name]: value };
+    setSort(newSort);
+  };
 
   return (
     <div className="container movie_list">
@@ -58,15 +78,26 @@ const MovieList = () => {
                   rating={[8, 7, 6]}
                 />
 
-                <select className="movie_sorting">
-                  <option value="">Sort By</option>
-                  <option value="">Date</option>
-                  <option value="">Rating</option>
+                <select
+                  name="by"
+                  className="movie_sorting"
+                  onChange={handleSort}
+                  value={sort.by}
+                >
+                  <option value="default">Sort By</option>
+                  <option value="release_date">Date</option>
+                  <option value="vote_average">Rating</option>
                 </select>
-                <select className="movie_sorting">
-                  <option value="">Sort By</option>
-                  <option value="">Ascending</option>
-                  <option value="">Descending</option>
+
+                <select
+                  name="order"
+                  className="movie_sorting"
+                  onChange={handleSort}
+                  value={sort.order}
+                >
+                  <option value=""></option>
+                  <option value="asc">Ascending</option>
+                  <option value="desc">Descending</option>
                 </select>
               </div>
             </div>
