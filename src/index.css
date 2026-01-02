@@ -98,3 +98,11 @@ body {
   font-size: 16px;
   color: #fff;
 }
+
+.movie_type {
+  text-transform: uppercase;
+}
+
+.active {
+  font-weight: bold;
+}

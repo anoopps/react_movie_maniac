@@ -24,6 +24,7 @@ export const getMoviesWithImages = async () => {
           );
 
           const items = [3, 4, 7, 8, 9, 10];
+          const type = ["toprated", "popular", "latest"];
           const randomItem = items[Math.floor(Math.random() * items.length)];
 
           const details = await detailRes.json();
@@ -33,6 +34,7 @@ export const getMoviesWithImages = async () => {
             backdrop: details.backdrop || null,
             vote_average: randomItem,
             release_date: details.year || "N/A",
+            type: type[Math.floor(Math.random() * type.length)],
           };
         } catch (err) {
           console.error("Detail fetch error:", err);

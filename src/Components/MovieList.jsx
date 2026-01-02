@@ -5,7 +5,8 @@ import MovieCard from "./MovieCard";
 import { getMoviesWithImages } from "../Services/movieService.js";
 import FilterMovieGroup from "./FilterMovieGroup.jsx";
 
-const MovieList = () => {
+const MovieList = ({ type }) => {
+  console.log(`MovieList component rendered with type: ${type}`);
   // State to hold the list of movies
   const [movies, setMovies] = useState([]);
   // State to hold the minimum rating for filtering
@@ -22,6 +23,7 @@ const MovieList = () => {
   useEffect(() => {
     async function fetchData() {
       const result = await getMoviesWithImages();
+      console.log(result);
       setMovies(result);
       setFilterMovies(result);
     }
@@ -33,7 +35,12 @@ const MovieList = () => {
       const sortedMovies = _.orderBy(filterMovies, [sort.by], [sort.order]);
       setFilterMovies(sortedMovies);
     }
-  }, [sort]);
+    if (type) {
+      const moviesBasedOnType = movies.filter((movie) => movie.type == type);
+      console.log("Movies based on type:", moviesBasedOnType);
+      setFilterMovies(moviesBasedOnType);
+    }
+  }, [sort, type]);
 
   const handleFilterMovie = (rate) => () => {
     setMinRating(rate);
@@ -67,7 +74,9 @@ const MovieList = () => {
         <header>
           <div className="row">
             <div className="col-md-8">
-              <h2 className="movie_list_heading">Popular</h2>
+              <h2 className="movie_list_heading">
+                {(type || "").toUpperCase()} Movies
+              </h2>
             </div>
 
             <div className="col-md-4">

@@ -18,8 +18,9 @@ const MovieCard = ({ movie }) => {
             <p className="align_center"> {movie.vote_average} ⭐</p>
           </div>
           <p className="movie_description">
-            {movie.tmdb_type}
-            {movie.year}
+            <p>{movie.tmdb_type}</p>
+            <p className="movie_type">{movie.type}</p>
+            <p>{movie.year}</p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
             molestiae et inventore assumenda.
           </p>

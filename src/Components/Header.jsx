@@ -1,19 +1,11 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./Navbar";
 
-const Header = () => {
+const Header = ({ movieType }) => {
   return (
     <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-      <nav className="my-2 my-md-0 mr-md-3">
-        <a className="p-2 text-dark" href="#">
-          Latest Movies
-        </a>
-        <a className="p-2 text-dark" href="#">
-          Popular
-        </a>
-        <a className="p-2 text-dark" href="#">
-          Top Rated
-        </a>
-      </nav>
+      <Navbar />
     </div>
   );
 };
